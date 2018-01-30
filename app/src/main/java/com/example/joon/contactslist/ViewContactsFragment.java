@@ -1,24 +1,33 @@
 package com.example.joon.contactslist;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.joon.contactslist.Utils.ContactListAdapter;
+import com.example.joon.contactslist.Utils.DatabaseHelper;
 import com.example.joon.contactslist.models.Contact;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * Created by joon on 06/01/18.
@@ -36,7 +45,10 @@ public class ViewContactsFragment extends Fragment{
     }
     OnContactSelectedListener mContactListener;
 
-
+    public interface OnAddContactListener{
+        public void onAddContact();
+    }
+    OnAddContactListener mOnAddContact;
 
 
 
@@ -48,6 +60,7 @@ public class ViewContactsFragment extends Fragment{
     private AppBarLayout viewContactsBar, searchBar;
     private ContactListAdapter adapter;
     private ListView contactsList;
+    private EditText mSearchContacts;
 
 
     @Nullable
@@ -57,6 +70,7 @@ public class ViewContactsFragment extends Fragment{
         viewContactsBar = (AppBarLayout) view.findViewById(R.id.viewContactsToolbar);
         searchBar = (AppBarLayout) view.findViewById(R.id.searchToolbar);
         contactsList = (ListView) view.findViewById(R.id.contactsList);
+        mSearchContacts = (EditText) view.findViewById(R.id.etSearchContacts);
         Log.d(TAG, "onCreateView: started");
 
         setAppBarState(STANDARD_APPBAR);
@@ -71,6 +85,7 @@ public class ViewContactsFragment extends Fragment{
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick: clicked fab");
+                mOnAddContact.onAddContact();
             }
         });
 
@@ -104,6 +119,7 @@ public class ViewContactsFragment extends Fragment{
 
         try {
             mContactListener = (OnContactSelectedListener) getActivity();
+            mOnAddContact = (OnAddContactListener) getActivity();
         }catch (ClassCastException e){
             Log.e(TAG, "onAttach: ClassCastException: " + e.getMessage() );
         }
@@ -111,28 +127,76 @@ public class ViewContactsFragment extends Fragment{
 
     private void setupContactsList(){
         final ArrayList<Contact> contacts = new ArrayList<>();
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
 
-        adapter = new ContactListAdapter(getActivity(), R.layout.layout_contactslistitem, contacts, "https://");
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+//        contacts.add(new Contact("Tarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
+        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+        Cursor cursor = databaseHelper.getAllContacts();
+
+        //Iterate through all the rows contained in the database
+        if(!cursor.moveToNext()){
+            Toast.makeText(getActivity(), "There are no contacts to show", Toast.LENGTH_SHORT).show();
+        }
+
+        while(cursor.moveToNext()){
+            contacts.add(new Contact(
+                    cursor.getString(1), //name
+                    cursor.getString(2), //phone number
+                    cursor.getString(3), //device
+                    cursor.getString(4), //email
+                    cursor.getString(5) //profile image uri
+            ));
+        }
+
+//        Log.d(TAG, "setupContactsList: image url: " + contacts.get(0).getProfileimage());
+
+        //<--- sort the arraylist based on contact name OR ANYTHING ELSE --->
+        Collections.sort(contacts, new Comparator<Contact>() {
+            @Override
+            public int compare(Contact o1, Contact o2) {
+                return o1.getName().compareToIgnoreCase(o2.getName());
+            }
+        });
+        // <-- change this to sort based on name or category, make an if statement with buttons of desired category type -->
+
+        adapter = new ContactListAdapter(getActivity(), R.layout.layout_contactslistitem, contacts, "");
+
+        mSearchContacts.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String text = mSearchContacts.getText().toString().toLowerCase(Locale.getDefault());
+                adapter.filter(text);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         contactsList.setAdapter(adapter);
 
         contactsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,6 +209,8 @@ public class ViewContactsFragment extends Fragment{
                 mContactListener.OnContactSelected(contacts.get(position));
             }
         });
+
+
 
     }
 

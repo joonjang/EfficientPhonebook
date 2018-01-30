@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.joon.contactslist.Utils.UniversalImageLoader;
+import com.example.joon.contactslist.ViewContactsFragment.OnAddContactListener;
 import com.example.joon.contactslist.models.Contact;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -17,7 +18,8 @@ import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity implements
         ViewContactsFragment.OnContactSelectedListener,
-        ContactFragment.OnEditContactListener{
+        ContactFragment.OnEditContactListener,
+        OnAddContactListener {
 
 
     private static final String TAG = "MainActivity";
@@ -42,6 +44,18 @@ public class MainActivity extends AppCompatActivity implements
         transaction.addToBackStack(getString(R.string.edit_contact_fragment));
         transaction.commit();
     }
+
+    @Override
+    public void onAddContact() {
+        Log.d(TAG, "onAddContact: navigating to " + getString(R.string.add_contact_fragment));
+
+        AddContactFragment fragment = new AddContactFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(getString(R.string.add_contact_fragment));
+        transaction.commit();
+    }
+
 
     @Override
     public void OnContactSelected(Contact contact) {
@@ -78,19 +92,19 @@ public class MainActivity extends AppCompatActivity implements
      * initialize the first fragment (ViewContactsFragment)
      */
 
-    private void init(){
+    private void init() {
         ViewContactsFragment fragment = new ViewContactsFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         // replace whatever is in this fragment_container view with this fragment
         // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.fragment_container,fragment);
+        transaction.replace(R.id.fragment_container, fragment);
         // back stack is pressing the back on android (now you know how the back button works, wow!)
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
 
-    private void initImageLoader(){
+    private void initImageLoader() {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(MainActivity.this);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
@@ -98,11 +112,12 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Compress a bitmap by the @param "quality"
      * Quality can be anywehre from 1-100 : 100 being the highest quality
+     *
      * @param bitmap
      * @param quality
      * @return
      */
-    public Bitmap compressBitmap(Bitmap bitmap, int quality){
+    public Bitmap compressBitmap(Bitmap bitmap, int quality) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
         return bitmap;
@@ -110,11 +125,12 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Generalized method for asking permission. Can pass any array of permission
+     *
      * @param permissions
      */
 
     //checking a list of permission which will result in a dialogue box asking for permissions
-    public void verifyPermission(String[] permissions){
+    public void verifyPermission(String[] permissions) {
         Log.d(TAG, "verifyPermission: asking user for permission");
         ActivityCompat.requestPermissions(
                 MainActivity.this,
@@ -126,20 +142,21 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Checks to see if permissionw as granted for the passed parameters
      * ONLY ONE PERMISSION MAY BE CHECKED AT A TIME
+     *
      * @param permission
      * @return
      */
     //in background of whether a single permission has been accepted
-    public boolean checkPermission(String[] permission){
+    public boolean checkPermission(String[] permission) {
         Log.d(TAG, "checkPermission: checking permission for: " + permission[0]);
         int permissionRequest = ActivityCompat.checkSelfPermission(
                 MainActivity.this,
                 permission[0]);
 
-        if(permissionRequest != PackageManager.PERMISSION_GRANTED){
+        if (permissionRequest != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "checkPermission: \n Permissions was not granted for: " + permission[0]);
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -150,18 +167,16 @@ public class MainActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionsResult: requestCode: " + requestCode);
 
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE:
-                for(int i = 0; i < permissions.length; i++){
-                    if(grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                for (int i = 0; i < permissions.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         Log.d(TAG, "onRequestPermissionsResult: User has allowed permissions to access:" + permissions[i]);
-                    }else{
+                    } else {
                         break;
                     }
                 }
                 break;
         }
     }
-
-
 }
