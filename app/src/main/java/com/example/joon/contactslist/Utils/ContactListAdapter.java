@@ -59,7 +59,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView name;
         CircleImageView contactImage;
         ProgressBar mProgressBar;
-        ImageView tabColour;
+//        ImageView tabColour;
     }
 
     @NonNull
@@ -95,7 +95,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
 
         String name = getItem(position).getName();
         String imagePath = getItem(position).getProfileimage();
-        String tabColour = getItem(position).getTabcolour();
+//        String tabColour = getItem(position).getTabcolour();
         holder.name.setText(name);
 
         //Progress bar

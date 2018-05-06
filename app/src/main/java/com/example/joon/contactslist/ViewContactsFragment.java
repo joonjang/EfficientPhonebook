@@ -157,8 +157,8 @@ public class ViewContactsFragment extends Fragment{
                     cursor.getString(2), //phone number
                     cursor.getString(3), //device
                     cursor.getString(4), //note
-                    cursor.getString(5), //profile image uri
-                    cursor.getString(6)  //get color tab
+                    cursor.getString(5) //profile image uri
+//                    cursor.getString(6)  //get color tab
             ));
         }
 

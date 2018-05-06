@@ -54,7 +54,8 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
     private CircleImageView mContactImage;
     private Spinner mSelectDevice;
     private Toolbar toolbar;
-    private String mSelectedImagePath, mTabColor;
+    private String mSelectedImagePath;
+//    private String  mTabColor;
     private int mPreviousKeyStroke;
 
 
@@ -80,8 +81,8 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
 //        ImageView mSelectedColorRed = (ImageView) view.findViewById(R.id.ivCategoryRed);
 //        ImageView mSelectedColorTeal = (ImageView) view.findViewById(R.id.ivCategoryTeal);
 //        ImageView mSelectedColorYellow = (ImageView) view.findViewById(R.id.ivCategoryYellow);
-
-
+//
+//
 //        mSelectedColorBrown.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -219,7 +220,7 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
                         mContact.setPhonenumber(mPhoneNumber.getText().toString());
                         mContact.setDevice(mSelectDevice.getSelectedItem().toString());
                         mContact.setNote(mNote.getText().toString());
-                        mContact.setTabcolour(mTabColor);
+//                        mContact.setTabcolour(null);
 
                         databaseHelper.updateContact(mContact, contactID);
                         Toast.makeText(getActivity(), "Contact Updated", Toast.LENGTH_SHORT).show();
