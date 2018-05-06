@@ -12,23 +12,26 @@ public class Contact implements Parcelable{
     private String name;
     private String phonenumber;
     private String device;
-    private String email;
+    private String note;
     private String profileimage;
+    private String tabcolour;
 
-    public Contact(String name, String phonenumber, String device, String email, String profileimage) {
+    public Contact(String name, String phonenumber, String device, String note, String profileimage, String tabcolour) {
         this.name = name;
         this.phonenumber = phonenumber;
         this.device = device;
-        this.email = email;
+        this.note = note;
         this.profileimage = profileimage;
+        this.tabcolour = tabcolour;
     }
 
     protected Contact(Parcel in) {
         name = in.readString();
         phonenumber = in.readString();
         device = in.readString();
-        email = in.readString();
+        note = in.readString();
         profileimage = in.readString();
+        tabcolour = in.readString();
     }
 
     public static final Creator<Contact> CREATOR = new Creator<Contact>() {
@@ -67,12 +70,12 @@ public class Contact implements Parcelable{
         this.device = device;
     }
 
-    public String getEmail() {
-        return email;
+    public String getNote() {
+        return note;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public String getProfileimage() {
@@ -82,6 +85,12 @@ public class Contact implements Parcelable{
     public void setProfileimage(String profileimage) {
         this.profileimage = profileimage;
     }
+    public String getTabcolour() {
+        return tabcolour;
+    }
+    public void setTabcolour(String tabcolour){
+        this.tabcolour = tabcolour;
+    }
 
     @Override
     public String toString() {
@@ -89,8 +98,9 @@ public class Contact implements Parcelable{
                 "name='" + name + '\'' +
                 ", phonenumber='" + phonenumber + '\'' +
                 ", device='" + device + '\'' +
-                ", email='" + email + '\'' +
+                ", note='" + note + '\'' +
                 ", profileimage='" + profileimage + '\'' +
+                ", tabcolour='" + tabcolour + '\'' +
                 '}';
     }
 
@@ -104,7 +114,8 @@ public class Contact implements Parcelable{
         parcel.writeString(name);
         parcel.writeString(phonenumber);
         parcel.writeString(device);
-        parcel.writeString(email);
+        parcel.writeString(note);
         parcel.writeString(profileimage);
+        parcel.writeString(tabcolour);
     }
 }

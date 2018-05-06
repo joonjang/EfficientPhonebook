@@ -30,6 +30,9 @@ import com.example.joon.contactslist.Utils.Init;
 import com.example.joon.contactslist.Utils.UniversalImageLoader;
 import com.example.joon.contactslist.models.Contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -47,12 +50,13 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
     }
 
     private Contact mContact;
-    private EditText mPhoneNumber, mName, mEmail;
+    private EditText mPhoneNumber, mName, mNote;
     private CircleImageView mContactImage;
     private Spinner mSelectDevice;
     private Toolbar toolbar;
-    private String mSelectedImagePath;
+    private String mSelectedImagePath, mTabColor;
     private int mPreviousKeyStroke;
+
 
 
     @Nullable
@@ -61,11 +65,102 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
         View view = inflater.inflate(R.layout.fragment_editcontact, container, false);
         mPhoneNumber = (EditText) view.findViewById(R.id.etContactPhone);
         mName = (EditText) view.findViewById(R.id.etContactName);
-        mEmail = (EditText) view.findViewById(R.id.etContactEmail);
+        mNote = (EditText) view.findViewById(R.id.etContactNote);
         mContactImage = (CircleImageView) view.findViewById(R.id.contactImage);
         mSelectDevice = (Spinner) view.findViewById(R.id.selectDevice);
         toolbar = (Toolbar) view.findViewById(R.id.editContactToolbar);
         Log.d(TAG, "onCreateView: started");
+
+//        //color tabs
+//        ImageView mSelectedColorBrown = (ImageView) view.findViewById(R.id.ivCategoryBrown);
+//        ImageView mSelectedColorGreen = (ImageView) view.findViewById(R.id.ivCategoryGreen);
+//        ImageView mSelectedColorOrange = (ImageView) view.findViewById(R.id.ivCategoryOrange);
+//        ImageView mSelectedColorPink = (ImageView) view.findViewById(R.id.ivCategoryPink);
+//        ImageView mSelectedColorPurple = (ImageView) view.findViewById(R.id.ivCategoryPurple);
+//        ImageView mSelectedColorRed = (ImageView) view.findViewById(R.id.ivCategoryRed);
+//        ImageView mSelectedColorTeal = (ImageView) view.findViewById(R.id.ivCategoryTeal);
+//        ImageView mSelectedColorYellow = (ImageView) view.findViewById(R.id.ivCategoryYellow);
+
+
+//        mSelectedColorBrown.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Brown";
+//                Log.d(TAG, "onClick: Brown clicked");
+//                Toast.makeText(getActivity(), "Categorized As Brown", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#4CAF50
+//        mSelectedColorGreen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Green";
+//                Log.d(TAG, "onClick: Green clicked");
+//                Toast.makeText(getActivity(), "Categorized As Green", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#FF9800
+//        mSelectedColorOrange.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Orange";
+//                Log.d(TAG, "onClick: Orange clicked");
+//                Toast.makeText(getActivity(), "Categorized As Orange", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#E91E63
+//        mSelectedColorPink.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Pink";
+//                Log.d(TAG, "onClick: Pink clicked");
+//                Toast.makeText(getActivity(), "Categorized As Pink", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#9C27B0
+//        mSelectedColorPurple.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Purple";
+//                Log.d(TAG, "onClick: Purple clicked");
+//                Toast.makeText(getActivity(), "Categorized As Purple", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#F44336
+//        mSelectedColorRed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Red";
+//                Log.d(TAG, "onClick: Red clicked");
+//                Toast.makeText(getActivity(), "Categorized As Red", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#009688
+//        mSelectedColorTeal.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Teal";
+//                Log.d(TAG, "onClick: Teal clicked");
+//                Toast.makeText(getActivity(), "Categorized As Teal", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//
+//        //#FFEB3B
+//        mSelectedColorYellow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mTabColor = "Yellow";
+//                Log.d(TAG, "onClick: Yellow clicked");
+//                Toast.makeText(getActivity(), "Categorized As Yellow", Toast.LENGTH_SHORT).show();
+//            }
+//        });
+
 
         mSelectedImagePath = null;
 
@@ -123,7 +218,8 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
                         mContact.setName(mName.getText().toString());
                         mContact.setPhonenumber(mPhoneNumber.getText().toString());
                         mContact.setDevice(mSelectDevice.getSelectedItem().toString());
-                        mContact.setEmail(mEmail.getText().toString());
+                        mContact.setNote(mNote.getText().toString());
+                        mContact.setTabcolour(mTabColor);
 
                         databaseHelper.updateContact(mContact, contactID);
                         Toast.makeText(getActivity(), "Contact Updated", Toast.LENGTH_SHORT).show();
@@ -134,6 +230,8 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
                 }
             }
         });
+
+
 
         //initiate the dialog box for choosing the image
         ImageView ivCamera = (ImageView) view.findViewById(R.id.ivCamera);
@@ -180,7 +278,7 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
     private void init(){
         mPhoneNumber.setText(mContact.getPhonenumber());
         mName.setText(mContact.getName());
-        mEmail.setText(mContact.getEmail());
+        mNote.setText(mContact.getNote());
         UniversalImageLoader.setImage(mContact.getProfileimage(), mContactImage, null, "");
 
         //Setting the device to the spinner
@@ -196,6 +294,9 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
         inflater.inflate(R.menu.contact_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -277,6 +378,59 @@ public class EditContactFragment extends Fragment implements ChangePhotoDialog.O
                 return false;
             }
         });
+
+
+        mNote.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+                mPreviousKeyStroke = keyCode;
+
+                return false;
+            }
+        });
+
+        // add bullet "•" per line
+        mNote.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                String words = s.toString();
+                Log.d(TAG, "beforeTextChanged: words "+ s);
+
+                List<String> myWordList = new ArrayList<String>();
+                myWordList.add(s.toString());
+
+                Log.d(TAG, "afterTextChanged: myWord " + myWordList);
+                char charWord = myWordList.toString().charAt(s.toString().length());
+
+                if(charWord == '\n' && mPreviousKeyStroke != KeyEvent.KEYCODE_DEL){
+                    words = String.format("%s• ", s.toString());
+                    mNote.setText(words);
+                    mNote.setSelection(words.length());
+                }
+
+
+                if(words.length()==1 && mPreviousKeyStroke != KeyEvent.KEYCODE_DEL
+                        && !words.contains("•")){
+                    words = String.format("• %s", s.toString());
+                    mNote.setText(words);
+                    mNote.setSelection(words.length());
+                }
+
+
+            }
+        });
+
 
         mPhoneNumber.addTextChangedListener(new TextWatcher() {
 

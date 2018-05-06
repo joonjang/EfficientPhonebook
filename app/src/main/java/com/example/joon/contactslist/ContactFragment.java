@@ -112,7 +112,7 @@ public class ContactFragment extends Fragment{
 
         ArrayList<String> properties = new ArrayList<>();
         properties.add(mContact.getPhonenumber());
-        properties.add(mContact.getEmail());
+        properties.add(mContact.getNote());
         ContactPropertyListAdapter adapter = new ContactPropertyListAdapter(getActivity(),R.layout.layout_cardview, properties);
         mListView.setAdapter(adapter);
         mListView.setDivider(null);

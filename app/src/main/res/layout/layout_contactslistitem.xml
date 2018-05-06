@@ -6,6 +6,12 @@
     android:background="@color/white"
     android:padding="10dp">
     <!--custom list item-->
+    <!--<ImageView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="5dp"-->
+        <!--android:src="@drawable/ic_top_category_color"-->
+        <!--android:id="@+id/tabColour" />-->
+
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/contactImage"
@@ -13,7 +19,8 @@
         android:layout_height="60dp"
         app:civ_border_width="0.5dp"
         app:civ_border_color="@color/black"
-        android:layout_centerVertical="true" />
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"/>
     
     <TextView
         android:layout_width="match_parent"

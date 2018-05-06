@@ -3,6 +3,7 @@ package com.example.joon.contactslist;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -18,11 +19,16 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SectionIndexer;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.joon.contactslist.Utils.ContactListAdapter;
 import com.example.joon.contactslist.Utils.DatabaseHelper;
 import com.example.joon.contactslist.models.Contact;
+import com.jaychang.srv.SimpleRecyclerView;
+import com.jaychang.srv.decoration.SectionHeaderProvider;
+import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,8 +41,7 @@ import java.util.Locale;
 
 public class ViewContactsFragment extends Fragment{
 
-    //delete this once debugged
-    private String testImageURL = "i.pinimg.com/564x/1f/58/fa/1f58fa2acb4b32bfdfd5ae2c683d2822--sara-underwood-charcoal-art.jpg";
+
     private static final String TAG = "ViewContactsFragment";
 
 
@@ -51,7 +56,6 @@ public class ViewContactsFragment extends Fragment{
     OnAddContactListener mOnAddContact;
 
 
-
     //variables and widgets
     private static final int STANDARD_APPBAR = 0;
     private static final int SEARCH_APPBAR = 1;
@@ -61,6 +65,8 @@ public class ViewContactsFragment extends Fragment{
     private ContactListAdapter adapter;
     private ListView contactsList;
     private EditText mSearchContacts;
+//    private SimpleRecyclerView simpleRecyclerView;
+
 
 
     @Nullable
@@ -69,7 +75,11 @@ public class ViewContactsFragment extends Fragment{
         View view = inflater.inflate(R.layout.fragment_viewcontacts, container, false);
         viewContactsBar = (AppBarLayout) view.findViewById(R.id.viewContactsToolbar);
         searchBar = (AppBarLayout) view.findViewById(R.id.searchToolbar);
+
+        ///////////////////////////////////////////
         contactsList = (ListView) view.findViewById(R.id.contactsList);
+        ///////////////////////////////////////////
+
         mSearchContacts = (EditText) view.findViewById(R.id.etSearchContacts);
         Log.d(TAG, "onCreateView: started");
 
@@ -110,6 +120,11 @@ public class ViewContactsFragment extends Fragment{
             }
         });
 
+//        // SimpleRecyclerView
+//        simpleRecyclerView = (SimpleRecyclerView) view.findViewById(R.id.contactsList);
+//        this.addRecyclerHeaders();
+//        this.bindData();
+
         return view;
     }
 
@@ -128,26 +143,6 @@ public class ViewContactsFragment extends Fragment{
     private void setupContactsList(){
         final ArrayList<Contact> contacts = new ArrayList<>();
 
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Sarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
-//        contacts.add(new Contact("Tarah Underwood", "604-420-6969", "mobile", "sarah@hotmail.com", testImageURL));
         DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
         Cursor cursor = databaseHelper.getAllContacts();
 
@@ -161,8 +156,9 @@ public class ViewContactsFragment extends Fragment{
                     cursor.getString(1), //name
                     cursor.getString(2), //phone number
                     cursor.getString(3), //device
-                    cursor.getString(4), //email
-                    cursor.getString(5) //profile image uri
+                    cursor.getString(4), //note
+                    cursor.getString(5), //profile image uri
+                    cursor.getString(6)  //get color tab
             ));
         }
 
@@ -270,6 +266,42 @@ public class ViewContactsFragment extends Fragment{
         super.onResume();
         setAppBarState(STANDARD_APPBAR);
     }
+
+//    //Recycler Header, COLOUR TAB HEADER
+//    private  void addRecyclerHeaders(){
+//        SectionHeaderProvider<Contact> sh = new SimpleSectionHeaderProvider<Contact>() {
+//            @NonNull
+//            @Override
+//            public View getSectionHeaderView(@NonNull Contact item, int position) {
+//                LayoutInflater inflater = getLayoutInflater();
+//                View view = inflater.inflate(R.layout.snippet_header, null, false);
+//                TextView textView = view.findViewById(R.id.tvHeaderTxt);
+//                textView.setText(item.getTabcolour());
+//                return view;
+//            }
+//
+//            @Override
+//            public boolean isSameSection(@NonNull Contact item, @NonNull Contact nextItem) {
+//                return item.getTabcolour() == nextItem.getTabcolour();
+//            }
+//
+//            public boolean isStick(){
+//                return true;
+//            }
+//        };
+//        simpleRecyclerView.setSectionHeader(sh);
+//    }
+
+//    //Bind data to recycler view
+//    private  void bindData(){
+//
+//        final ArrayList<Contact> contacts = new ArrayList<>();
+//
+//        DatabaseHelper databaseHelper = new DatabaseHelper(getActivity());
+//        Cursor cursor = databaseHelper.getAllContacts();
+//
+//
+//    }
 }
 
 

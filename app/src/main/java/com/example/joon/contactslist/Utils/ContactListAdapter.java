@@ -1,13 +1,18 @@
 package com.example.joon.contactslist.Utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -54,6 +59,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
         TextView name;
         CircleImageView contactImage;
         ProgressBar mProgressBar;
+        ImageView tabColour;
     }
 
     @NonNull
@@ -73,6 +79,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
             //------------------ Stuff to change ---------------------------------------------------
             holder.name = (TextView) convertView.findViewById(R.id.contactName);
             holder.contactImage = (CircleImageView) convertView.findViewById(R.id.contactImage);
+//            holder.tabColour = (ImageView) convertView.findViewById(R.id.tabColour);
             //--------------------------------------------------------------------------------------
 
             holder.mProgressBar = (ProgressBar) convertView.findViewById(R.id.contactsProgressBar);
@@ -88,6 +95,7 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
 
         String name = getItem(position).getName();
         String imagePath = getItem(position).getProfileimage();
+        String tabColour = getItem(position).getTabcolour();
         holder.name.setText(name);
 
         //Progress bar
@@ -113,6 +121,11 @@ public class ContactListAdapter extends ArrayAdapter<Contact> {
                 holder.mProgressBar.setVisibility(view.GONE);
             }
         });
+
+        //set custom tab colour
+        // REPLACE CIRCLE IMAGE FOR COLOUR?!
+//        int color = Color.parseColor(tabColour);
+//        ((GradientDrawable)holder.tabColour.getBackground()).setSize(50,50);
 
         //--------------------------------------------------------------------------------------
 

@@ -8,12 +8,14 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.joon.contactslist.MainActivity;
@@ -95,31 +97,21 @@ public class ContactPropertyListAdapter extends ArrayAdapter<String> {
         final String property = getItem(position);
         holder.property.setText(property);
 
-        //check if it's an email or a phone number
-        if(property.contains("@")){
-            holder.leftIcon.setImageResource(mContext.getResources().getIdentifier("@drawable/ic_email", null, mContext.getPackageName()));
+        //check if it's an note or a phone number
+        if(property.contains("•")){
+            RelativeLayout.LayoutParams layoutParams =
+                    (RelativeLayout.LayoutParams)holder.property.getLayoutParams();
+            layoutParams.removeRule(RelativeLayout.CENTER_IN_PARENT);
+            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.iconLeftCardView);
+
+            holder.leftIcon.setImageResource(mContext.getResources().getIdentifier("@drawable/ic_note_black", null, mContext.getPackageName()));
             holder.leftIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "onClick: opening email");
-                    Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                    emailIntent.setType("plain/text");
-                    emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {property});
-                    mContext.startActivity(emailIntent);
+                    Log.d(TAG, "onClick: edit note");
 
-                    /* optional setting for sending emails
-                    String email = property;
-                    String subject = "subject";
-                    String body = "body..."
-
-                    String uriText = "mailto: + Uri.encode(email) + "?subject=" + Uri.encode(subject) +
-                    "&body=" + Uri.encode(body);
-                    Uri uri = Uri.parse(uriText);
-
-                    emailIntent.setData(uri);
-                    mContext.startActivity(emailIntent);
-                     */
-
+                    //Make it so note is editable
+                    //Make it start with star
 
                 }
             });

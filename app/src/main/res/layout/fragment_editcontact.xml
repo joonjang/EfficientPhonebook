@@ -23,6 +23,19 @@
 
         </RelativeLayout>
 
+        <!-- Category color options -->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_below="@id/relLayout1"-->
+            <!--android:layout_marginTop="30dp">-->
+
+            <!--<include layout="@layout/snippet_editcategorycolor"/>-->
+
+        <!--</RelativeLayout>-->
+
+
         <!--Circle picture profile-->
 
         <RelativeLayout
@@ -103,52 +116,76 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/ivPhone"
-                android:inputType="textNoSuggestions"
+                android:inputType="phone"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:id="@+id/etContactPhone"
                 android:layout_marginStart="20dp" />
 
             <Spinner
+                android:id="@+id/selectDevice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/etContactPhone"
+                android:layout_alignBottom="@+id/etContactPhone"
+                android:layout_alignParentEnd="true"
                 android:entries="@array/device_options"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginStart="20dp"
-                android:layout_below="@id/ivPhone"
-                android:id="@+id/selectDevice"
-                android:layout_marginTop="20dp"
-                android:layout_alignStart="@id/etContactPhone"/>
+                android:textSize="16sp" />
 
         </RelativeLayout>
 
-        <!--Email info-->
+        <!--&lt;!&ndash;Email info&ndash;&gt;-->
+
+        <!--<RelativeLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/relLayout4"-->
+            <!--android:id="@+id/relLayout5"-->
+            <!--android:padding="10dp">-->
+
+            <!--<ImageView-->
+                <!--android:layout_width="30dp"-->
+                <!--android:layout_height="30dp"-->
+                <!--android:src="@drawable/ic_email_grey"-->
+                <!--android:id="@+id/ivEmail" />-->
+
+            <!--<EditText-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_toRightOf="@id/ivEmail"-->
+                <!--android:inputType="textNoSuggestions"-->
+                <!--android:textSize="16sp"-->
+                <!--android:textColor="@color/black"-->
+                <!--android:id="@+id/etContactEmail"-->
+                <!--android:layout_marginStart="20dp"/>-->
+
+
+        <!--</RelativeLayout>-->
+
+        <!-- Note info -->
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/relLayout6"
             android:layout_below="@id/relLayout4"
-            android:id="@+id/relLayout5"
-            android:padding="10dp">
-
+            android:padding="10dp"
+            android:orientation="horizontal">
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/ic_email_grey"
-                android:id="@+id/ivEmail"
-                android:layout_centerVertical="true"/>
-
+                android:src="@drawable/ic_note"
+                android:id="@+id/ivNote"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/ivEmail"
-                android:inputType="textNoSuggestions"
+                android:layout_toRightOf="@id/ivNote"
+                android:inputType="textMultiLine|textAutoCorrect"
                 android:textSize="16sp"
                 android:textColor="@color/black"
-                android:id="@+id/etContactEmail"
-                android:layout_marginStart="20dp"/>
-
+                android:id="@+id/etContactNote"
+                android:layout_marginStart="20dp" />
 
         </RelativeLayout>
 

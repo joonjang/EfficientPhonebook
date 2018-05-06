@@ -8,10 +8,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.joon.contactslist.Utils.UniversalImageLoader;
 import com.example.joon.contactslist.ViewContactsFragment.OnAddContactListener;
 import com.example.joon.contactslist.models.Contact;
+import com.jaychang.srv.SimpleRecyclerView;
+import com.jaychang.srv.decoration.SectionHeaderProvider;
+import com.jaychang.srv.decoration.SimpleSectionHeaderProvider;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.ByteArrayOutputStream;
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements
         ContactFragment.OnEditContactListener,
         OnAddContactListener {
 
+    SimpleRecyclerView simpleRecyclerView;
 
     private static final String TAG = "MainActivity";
     private static final int REQUEST_CODE = 1;
@@ -86,6 +93,9 @@ public class MainActivity extends AppCompatActivity implements
 
         initImageLoader();
         init();
+//        simpleRecyclerView=findViewById(R.id.contactsList);
+//        this.addRecyclerHeaders();
+
     }
 
     /**
@@ -179,4 +189,31 @@ public class MainActivity extends AppCompatActivity implements
                 break;
         }
     }
+
+//    //Recycler Header, COLOUR TAB HEADER
+//    private  void addRecyclerHeaders(){
+//        SectionHeaderProvider<Contact> sh = new SimpleSectionHeaderProvider<Contact>() {
+//            @NonNull
+//            @Override
+//            public View getSectionHeaderView(@NonNull Contact item, int position) {
+//                LayoutInflater inflater = getLayoutInflater();
+//                View view = inflater.inflate(R.layout.snippet_header, null, false);
+//                TextView textView = view.findViewById(R.id.tvHeaderTxt);
+//                textView.setText(item.getTabcolour());
+//                return view;
+//            }
+//
+//            @Override
+//            public boolean isSameSection(@NonNull Contact item, @NonNull Contact nextItem) {
+//                return item.getTabcolour() == nextItem.getTabcolour();
+//            }
+//
+//            public boolean isStick(){
+//                return true;
+//            }
+//        };
+//        simpleRecyclerView.setSectionHeader(sh);
+//    }
+
+
 }
